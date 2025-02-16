@@ -1,0 +1,30 @@
+#!/bin/bash -ex
+
+# Update yum
+yum -y update
+
+# installs nvm (Node Version Manager)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# download and install Node.js (you may need to restart the terminal)
+nvm install 20
+
+# Create a dedicated directory for the application
+mkdir -p /var/app
+
+# Get the app from S3
+wget https://aws-tc-largeobjects.s3-us-west-2.amazonaws.com/ILT-TF-100-TECESS-5/app/app.zip
+
+# Extract it to the desired folder
+unzip app.zip -d /var/app/
+cd /var/app/
+
+# Install dependencies
+npm install
+
+# Start the app
+npm start
